@@ -1,0 +1,1627 @@
+<!--
+DEPLOYMENT STEPS:
+1. Push all files to GitHub repo: mehmetaliayran.github.io
+   OR connect repo to Netlify (recommended for AI chat to work)
+2. On Netlify: Site Settings → Environment Variables → Add ANTHROPIC_API_KEY
+3. Get API key from: https://console.anthropic.com
+4. Redeploy after adding the key
+5. AI chat will NOT work on GitHub Pages (needs serverless backend)
+   Use Netlify for full functionality.
+-->
+<!-- Ensure Mehmet_Ali_Ayran_CV.pdf is in the root folder -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mehmet Ali Ayran — Full Stack Developer</title>
+  <meta name="description" content="Full Stack Developer based in Istanbul, Turkey. Building scalable web applications and immersive digital experiences. Open to work.">
+  <meta property="og:title" content="Mehmet Ali Ayran — Full Stack Developer">
+  <meta property="og:description" content="Full Stack Developer based in Istanbul. Building scalable web apps and digital experiences. Open to remote opportunities.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍💻</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & Variables ────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0A0A0F;
+      --bg-card:    #111118;
+      --border:     #1e1e2e;
+      --accent:     #6C63FF;
+      --accent-sec: #8B83FF;
+      --text:       #E2E8F0;
+      --text-muted: #64748B;
+      --r-card:     12px;
+      --r-btn:      8px;
+      --font-h:     'Space Grotesk', sans-serif;
+      --font-b:     'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-b);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout Utilities ─────────────────────────────────────────────── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .section    { padding: 80px 0; }
+
+    .section-title {
+      font-family: var(--font-h);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 48px;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 3px;
+      background: var(--accent);
+      margin-top: 10px;
+    }
+
+    /* ── Scroll Fade-In ───────────────────────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Buttons ──────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: var(--r-btn);
+      font-family: var(--font-b);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-sec); }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Navigation ───────────────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 0;
+      transition: background 0.3s, border-bottom 0.3s, padding 0.3s;
+    }
+    .nav.scrolled {
+      background: rgba(10, 10, 15, 0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 12px 0;
+    }
+    .nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--font-h);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 36px;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-right { display: flex; align-items: center; gap: 14px; }
+
+    .lang-toggle {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: var(--r-btn);
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-family: var(--font-b);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .lang-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── Hero ─────────────────────────────────────────────────────────── */
+    .hero {
+      padding: 160px 0 88px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      padding: 6px 14px;
+      background: rgba(108, 99, 255, 0.1);
+      border-radius: 100px;
+      border: 1px solid rgba(108, 99, 255, 0.3);
+    }
+
+    .hero h1 {
+      font-family: var(--font-h);
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .typewriter-line {
+      font-family: var(--font-h);
+      font-size: clamp(1.3rem, 3vw, 2rem);
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 28px;
+      min-height: 2.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .cursor {
+      display: inline-block;
+      animation: blink 1s step-end infinite;
+      margin-left: 2px;
+      color: var(--accent);
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    .hero-bio {
+      max-width: 580px;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-bottom: 36px;
+      line-height: 1.75;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 44px;
+    }
+
+    .social-row { display: flex; gap: 14px; }
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .social-link:hover { border-color: var(--accent); color: var(--accent); }
+    .social-link svg { width: 18px; height: 18px; fill: currentColor; }
+
+    /* ── About ────────────────────────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      line-height: 1.85;
+      margin-bottom: 18px;
+      font-size: 1rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      padding: 24px 20px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .stat-card:hover { border-color: var(--accent); }
+    .stat-num {
+      display: block;
+      font-family: var(--font-h);
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    /* ── Skills ───────────────────────────────────────────────────────── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 16px;
+    }
+
+    .skill-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      padding: 24px;
+      transition: border-color 0.2s;
+    }
+    .skill-card:hover { border-color: var(--accent); }
+
+    .skill-card h3 {
+      font-family: var(--font-h);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 16px;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .skill-tags span {
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      background: rgba(108, 99, 255, 0.07);
+      border: 1px solid rgba(108, 99, 255, 0.18);
+      border-radius: 100px;
+      color: var(--text-muted);
+    }
+
+    /* ── Experience Timeline ──────────────────────────────────────────── */
+    .timeline {
+      position: relative;
+      padding-left: 36px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 9px;
+      top: 6px;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 52px;
+    }
+    .timeline-item:last-child { margin-bottom: 0; }
+
+    .timeline-dot {
+      position: absolute;
+      left: -31px;
+      top: 6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+    }
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .timeline-content h3 {
+      font-family: var(--font-h);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .timeline-date {
+      font-size: 0.78rem;
+      color: var(--accent);
+      padding: 3px 12px;
+      background: rgba(108, 99, 255, 0.1);
+      border-radius: 100px;
+      border: 1px solid rgba(108, 99, 255, 0.2);
+      white-space: nowrap;
+    }
+
+    .timeline-company {
+      color: var(--accent-sec);
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 14px;
+    }
+
+    .timeline-content ul { list-style: none; padding: 0; }
+    .timeline-content ul li {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      padding: 4px 0 4px 18px;
+      position: relative;
+      line-height: 1.6;
+    }
+    .timeline-content ul li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* ── Projects ─────────────────────────────────────────────────────── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+    .project-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .project-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .project-badge {
+      font-size: 0.7rem;
+      padding: 2px 10px;
+      background: rgba(108, 99, 255, 0.12);
+      border-radius: 100px;
+      color: var(--accent-sec);
+      font-weight: 600;
+      border: 1px solid rgba(108, 99, 255, 0.2);
+    }
+
+    .project-card h3 {
+      font-family: var(--font-h);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .project-card p {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      line-height: 1.65;
+      flex: 1;
+      margin-bottom: 16px;
+    }
+
+    .project-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .project-stack span {
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+    }
+    .project-links a {
+      font-size: 0.8rem;
+      padding: 6px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--r-btn);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .project-links a:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Hire CTA ─────────────────────────────────────────────────────── */
+    .hire-cta {
+      padding: 72px 0;
+      background: #0d0d16;
+      border-left: 4px solid var(--accent);
+    }
+    .hire-cta .container { text-align: center; }
+    .hire-cta h2 {
+      font-family: var(--font-h);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .hire-cta p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 36px;
+    }
+    .hire-btns {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── Contact ──────────────────────────────────────────────────────── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .contact-items { display: flex; flex-direction: column; gap: 14px; }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: var(--text);
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      transition: border-color 0.2s;
+    }
+    .contact-item:hover { border-color: var(--accent); }
+
+    .contact-icon {
+      width: 36px;
+      height: 36px;
+      background: rgba(108, 99, 255, 0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--accent);
+    }
+    .contact-icon svg { width: 16px; height: 16px; fill: currentColor; }
+
+    .contact-info-text .contact-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: block;
+    }
+    .contact-info-text .contact-value {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .chat-invite-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      height: 100%;
+    }
+    .chat-invite-emoji { font-size: 2.5rem; line-height: 1; }
+    .chat-invite-card h3 {
+      font-family: var(--font-h);
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    .chat-invite-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────────────── */
+    .footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+    }
+    .footer .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer p { color: var(--text-muted); font-size: 0.85rem; }
+    .footer-social { display: flex; gap: 12px; }
+
+    /* ── Chat FAB ─────────────────────────────────────────────────────── */
+    .chat-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 200;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 13px 22px;
+      border-radius: 100px;
+      font-family: var(--font-b);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(108, 99, 255, 0.45);
+      transition: all 0.2s;
+    }
+    .chat-fab:hover { background: var(--accent-sec); transform: translateY(-2px); }
+    .chat-fab.hidden { display: none; }
+
+    /* ── Chat Drawer ──────────────────────────────────────────────────── */
+    .chat-drawer {
+      position: fixed;
+      bottom: 84px;
+      right: 24px;
+      width: 360px;
+      height: 480px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateY(16px) scale(0.96);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .chat-drawer.open {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .chat-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .chat-header-left { display: flex; align-items: center; gap: 12px; }
+
+    .chat-avatar {
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-h);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .chat-meta-name {
+      font-family: var(--font-h);
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .chat-meta-sub { font-size: 0.72rem; color: var(--text-muted); }
+
+    .chat-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .chat-close:hover { color: var(--text); }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .message {
+      max-width: 87%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+    .message.user {
+      background: var(--accent);
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 3px;
+    }
+    .message.assistant {
+      background: #1a1a28;
+      color: var(--text);
+      align-self: flex-start;
+      border-bottom-left-radius: 3px;
+    }
+
+    .typing-indicator {
+      display: flex;
+      gap: 5px;
+      padding: 12px 16px;
+      background: #1a1a28;
+      border-radius: 12px;
+      border-bottom-left-radius: 3px;
+      align-self: flex-start;
+    }
+    .typing-indicator span {
+      width: 7px;
+      height: 7px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      animation: typing-bounce 1.3s ease infinite;
+    }
+    .typing-indicator span:nth-child(2) { animation-delay: 0.18s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.36s; }
+    @keyframes typing-bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-7px); }
+    }
+
+    .chat-input-area {
+      padding: 12px 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .chat-input-area input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-btn);
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: var(--font-b);
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .chat-input-area input:focus { border-color: var(--accent); }
+    .chat-input-area input::placeholder { color: var(--text-muted); }
+    .chat-send {
+      background: var(--accent);
+      border: none;
+      border-radius: var(--r-btn);
+      padding: 10px 14px;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .chat-send:hover { background: var(--accent-sec); }
+    .chat-send svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* ── Mobile Responsive ────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: rgba(10, 10, 15, 0.98);
+        padding: 28px 24px;
+        gap: 28px;
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { font-size: 1rem; }
+      .hamburger { display: flex; }
+
+      .hero { padding: 120px 0 64px; min-height: unset; }
+      .hero h1 { font-size: 2.2rem; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+
+      .hire-btns { flex-direction: column; align-items: stretch; }
+      .hire-btns .btn { justify-content: center; }
+
+      .chat-drawer { width: calc(100vw - 32px); right: 16px; }
+      .chat-fab { right: 16px; bottom: 16px; }
+
+      .section { padding: 64px 0; }
+      .section-title { font-size: 1.7rem; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-btns { flex-direction: column; }
+      .hero-btns .btn { justify-content: center; text-align: center; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ───────────────────────────────────────────────────── -->
+  <nav class="nav" id="nav">
+    <div class="container">
+      <a href="#" class="nav-logo">MA.</a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#about"      data-i18n="nav.about">About</a></li>
+        <li><a href="#skills"     data-i18n="nav.skills">Skills</a></li>
+        <li><a href="#experience" data-i18n="nav.experience">Experience</a></li>
+        <li><a href="#projects"   data-i18n="nav.projects">Projects</a></li>
+        <li><a href="#contact"    data-i18n="nav.contact">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="lang-toggle" id="lang-toggle" onclick="toggleLang()" aria-label="Switch language">EN</button>
+        <button class="hamburger" id="hamburger" onclick="toggleHamburger()" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ── Hero ───────────────────────────────────────────────────────── -->
+    <section class="hero" id="hero">
+      <div class="container">
+        <span class="eyebrow" data-i18n="hero.eyebrow">Full Stack Developer · Open to Work</span>
+        <h1 data-i18n="hero.h1">Hi, I'm Mehmet Ali Ayran</h1>
+        <div class="typewriter-line">
+          <span id="typewriter-text"></span><span class="cursor">|</span>
+        </div>
+        <p class="hero-bio" data-i18n="hero.bio">Software Engineering graduate based in Istanbul. I build scalable web applications and love creating immersive digital experiences.</p>
+        <div class="hero-btns">
+          <a href="#projects" class="btn btn-primary" data-i18n="hero.cta1">View Projects</a>
+          <a href="Mehmet_Ali_Ayran_CV.pdf" download class="btn btn-outline" data-i18n="hero.cta2">Download CV</a>
+        </div>
+        <div class="social-row">
+          <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+          <a href="https://linkedin.com/in/mehmetaliayran" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── About ───────────────────────────────────────────────────────── -->
+    <section class="section" id="about">
+      <div class="container">
+        <h2 class="section-title fade-in" data-i18n="about.title">About Me</h2>
+        <div class="about-grid">
+          <div class="about-text fade-in">
+            <p data-i18n="about.p1">Software Engineering graduate from Istanbul Nişantaşı University, graduated January 2026. I started my academic journey at Istanbul Gelişim University (Computer Engineering, 2020–2022) before transferring to complete my degree.</p>
+            <p data-i18n="about.p2">With 2 international internships spanning project management and software engineering, I bring real-world experience to every project. I'm also the founder of Volvena Studios, an indie game development studio where I build original titles using Unreal Engine 5 and C++.</p>
+          </div>
+          <div class="stats-grid fade-in">
+            <div class="stat-card">
+              <span class="stat-num">2</span>
+              <span class="stat-label" data-i18n="stat.internships">Internships</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">4+</span>
+              <span class="stat-label" data-i18n="stat.years">Years Coding</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">2</span>
+              <span class="stat-label" data-i18n="stat.games">Games Built</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">∞</span>
+              <span class="stat-label" data-i18n="stat.curiosity">Curiosity</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Skills ─────────────────────────────────────────────────────── -->
+    <section class="section" id="skills">
+      <div class="container">
+        <h2 class="section-title fade-in" data-i18n="skills.title">Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-card fade-in">
+            <h3 data-i18n="skill.frontend">Frontend</h3>
+            <div class="skill-tags">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>React</span>
+            </div>
+          </div>
+          <div class="skill-card fade-in">
+            <h3 data-i18n="skill.backend">Backend</h3>
+            <div class="skill-tags">
+              <span>Node.js</span><span>Express</span><span>REST API</span><span>Python</span><span>Django</span>
+            </div>
+          </div>
+          <div class="skill-card fade-in">
+            <h3 data-i18n="skill.gamedev">Game Dev</h3>
+            <div class="skill-tags">
+              <span>Unreal Engine 5</span><span>C++</span><span>Blueprint</span>
+            </div>
+          </div>
+          <div class="skill-card fade-in">
+            <h3 data-i18n="skill.database">Database</h3>
+            <div class="skill-tags">
+              <span>SQL</span><span>PostgreSQL</span><span>MongoDB</span>
+            </div>
+          </div>
+          <div class="skill-card fade-in">
+            <h3 data-i18n="skill.tools">Tools</h3>
+            <div class="skill-tags">
+              <span>Git</span><span>GitHub</span><span>Linux</span><span>Docker</span>
+            </div>
+          </div>
+          <div class="skill-card fade-in">
+            <h3 data-i18n="skill.langs">Languages</h3>
+            <div class="skill-tags">
+              <span data-i18n="lang.tr">Turkish (Native)</span>
+              <span data-i18n="lang.en">English (B2)</span>
+              <span data-i18n="lang.fr">French (A1)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Experience ─────────────────────────────────────────────────── -->
+    <section class="section" id="experience">
+      <div class="container">
+        <h2 class="section-title fade-in" data-i18n="exp.title">Experience</h2>
+        <div class="timeline">
+
+          <div class="timeline-item fade-in">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <h3 data-i18n="exp.1.title">Project Specialist Intern</h3>
+                <span class="timeline-date" data-i18n="exp.1.date">Oct 2025 – Apr 2026</span>
+              </div>
+              <p class="timeline-company" data-i18n="exp.1.company">TNC Group / Human Ports · Belgrade, Serbia</p>
+              <ul>
+                <li data-i18n="exp.1.b1">Completed training in HR Management, Project Management, Company Law, Brand Design</li>
+                <li data-i18n="exp.1.b2">Received 2 official reference letters from HR Specialist and Chairman of the Board</li>
+                <li data-i18n="exp.1.b3">Hands-on experience in project planning, resource and risk management</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="timeline-item fade-in">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <h3 data-i18n="exp.2.title">Software Engineering Intern</h3>
+                <span class="timeline-date" data-i18n="exp.2.date">Sep 2025 – Jan 2026</span>
+              </div>
+              <p class="timeline-company" data-i18n="exp.2.company">Fil Filtre A.Ş · İskenderun, Hatay</p>
+              <ul>
+                <li data-i18n="exp.2.b1">Assisted Software Engineer in day-to-day development tasks</li>
+                <li data-i18n="exp.2.b2">Gained exposure to professional software development workflows</li>
+                <li data-i18n="exp.2.b3">Supported internal operations and contributed to ongoing projects</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="timeline-item fade-in">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <h3 data-i18n="exp.3.title">Founder</h3>
+                <span class="timeline-date" data-i18n="exp.3.date">2023 – Present</span>
+              </div>
+              <p class="timeline-company" data-i18n="exp.3.company">Volvena Studios · Istanbul</p>
+              <ul>
+                <li data-i18n="exp.3.b1">Independent game development studio for PC and mobile platforms</li>
+                <li data-i18n="exp.3.b2">Building original game IP using Unreal Engine 5 and C++</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Projects ───────────────────────────────────────────────────── -->
+    <section class="section" id="projects">
+      <div class="container">
+        <h2 class="section-title fade-in" data-i18n="proj.title">Projects</h2>
+        <div class="projects-grid">
+
+          <div class="project-card fade-in">
+            <div class="project-meta">
+              <span class="project-tag" data-i18n="proj.1.tag">Game Dev</span>
+            </div>
+            <h3 data-i18n="proj.1.name">Parkour Game</h3>
+            <p data-i18n="proj.1.desc">Third-person parkour platformer with floating platform level design and custom character movement system. Gameplay demo available.</p>
+            <div class="project-stack">
+              <span>UE5</span><span>C++</span><span>Blueprint</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" data-i18n="proj.github">GitHub</a>
+              <a href="#" data-i18n="proj.demo">Demo</a>
+            </div>
+          </div>
+
+          <div class="project-card fade-in">
+            <div class="project-meta">
+              <span class="project-tag" data-i18n="proj.2.tag">Game Dev · Mobile</span>
+              <span class="project-badge" data-i18n="proj.2.badge">In Development</span>
+            </div>
+            <h3 data-i18n="proj.2.name">Lane Rush</h3>
+            <p data-i18n="proj.2.desc">Hyper-casual mobile endless runner in a low-poly city environment. Features enemy system, skill mechanics and health system.</p>
+            <div class="project-stack">
+              <span>UE5</span><span>C++</span><span>Blueprint</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" data-i18n="proj.github">GitHub</a>
+            </div>
+          </div>
+
+          <div class="project-card fade-in">
+            <div class="project-meta">
+              <span class="project-tag" data-i18n="proj.3.tag">Full Stack</span>
+              <span class="project-badge" data-i18n="proj.3.badge">This site</span>
+            </div>
+            <h3 data-i18n="proj.3.name">Portfolio Website</h3>
+            <p data-i18n="proj.3.desc">Personal portfolio with AI-powered assistant, bilingual EN/TR support, and serverless backend proxy.</p>
+            <div class="project-stack">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Claude AI</span><span>Netlify</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" data-i18n="proj.github">GitHub</a>
+            </div>
+          </div>
+
+          <div class="project-card fade-in">
+            <div class="project-meta">
+              <span class="project-tag" data-i18n="proj.4.tag">Full Stack</span>
+              <span class="project-badge" data-i18n="proj.4.badge">In Development</span>
+            </div>
+            <h3 data-i18n="proj.4.name">E-Commerce App</h3>
+            <p data-i18n="proj.4.desc">Full-featured e-commerce platform with product listings, cart management and user authentication.</p>
+            <div class="project-stack">
+              <span>React</span><span>Node.js</span><span>PostgreSQL</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" data-i18n="proj.github">GitHub</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Hire Me CTA ─────────────────────────────────────────────────── -->
+    <section class="hire-cta">
+      <div class="container">
+        <h2 data-i18n="hire.title">Currently Open to Opportunities</h2>
+        <p data-i18n="hire.sub">Looking for a Full Stack Developer role · Istanbul or Remote</p>
+        <div class="hire-btns">
+          <a href="Mehmet_Ali_Ayran_CV.pdf" download class="btn btn-primary" data-i18n="hire.cv">Download CV</a>
+          <a href="https://linkedin.com/in/mehmetaliayran" target="_blank" rel="noopener noreferrer" class="btn btn-outline" data-i18n="hire.linkedin">View LinkedIn</a>
+          <a href="mailto:m.aliayran@gmail.com" class="btn btn-outline" data-i18n="hire.email">Send Email</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Contact ─────────────────────────────────────────────────────── -->
+    <section class="section" id="contact">
+      <div class="container">
+        <h2 class="section-title fade-in" data-i18n="contact.title">Get in Touch</h2>
+        <div class="contact-grid">
+
+          <div class="contact-items fade-in">
+            <a href="mailto:m.aliayran@gmail.com" class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              </div>
+              <div class="contact-info-text">
+                <span class="contact-label" data-i18n="contact.email">Email</span>
+                <span class="contact-value">m.aliayran@gmail.com</span>
+              </div>
+            </a>
+            <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+              </div>
+              <div class="contact-info-text">
+                <span class="contact-label" data-i18n="contact.github">GitHub</span>
+                <span class="contact-value">github.com/mehmetaliayran</span>
+              </div>
+            </a>
+            <a href="https://linkedin.com/in/mehmetaliayran" target="_blank" rel="noopener noreferrer" class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              </div>
+              <div class="contact-info-text">
+                <span class="contact-label" data-i18n="contact.linkedin">LinkedIn</span>
+                <span class="contact-value">linkedin.com/in/mehmetaliayran</span>
+              </div>
+            </a>
+            <a href="tel:+905310100911" class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+              </div>
+              <div class="contact-info-text">
+                <span class="contact-label" data-i18n="contact.phone">Phone</span>
+                <span class="contact-value">+90 531 010 09 11</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="chat-invite-card fade-in">
+            <div class="chat-invite-emoji">🤖</div>
+            <h3 data-i18n="chat.invite.title">Ask my AI assistant</h3>
+            <p data-i18n="chat.invite.desc">Ask my AI assistant anything about me — my experience, projects, skills, or availability. Powered by Claude.</p>
+            <button class="btn btn-primary" onclick="toggleChat()" data-i18n="chat.btn">Ask Mehmet Ali</button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container">
+      <p data-i18n="footer.copy">© 2025 Mehmet Ali Ayran · Istanbul, Turkey</p>
+      <div class="footer-social">
+        <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
+          <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/mehmetaliayran" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── Chat FAB ────────────────────────────────────────────────────────── -->
+  <button class="chat-fab" id="chat-fab" onclick="toggleChat()">
+    <span data-i18n="chat.btn">Ask Mehmet Ali</span>
+  </button>
+
+  <!-- ── Chat Drawer ────────────────────────────────────────────────────── -->
+  <div class="chat-drawer" id="chat-drawer" role="dialog" aria-label="AI Chat">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar">AI</div>
+        <div>
+          <div class="chat-meta-name" data-i18n="chat.header.name">AI Assistant</div>
+          <div class="chat-meta-sub" data-i18n="chat.powered">Powered by Claude</div>
+        </div>
+      </div>
+      <button class="chat-close" onclick="toggleChat()" aria-label="Close chat">×</button>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input-area">
+      <input
+        type="text"
+        id="chat-input"
+        placeholder="Ask me anything..."
+        data-i18n-placeholder="chat.placeholder"
+        onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); sendMessage(); }"
+        autocomplete="off"
+      >
+      <button class="chat-send" onclick="sendMessage()" aria-label="Send message">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // ── Translations ────────────────────────────────────────────────────
+    const i18n = {
+      en: {
+        // Navigation
+        'nav.about':      'About',
+        'nav.skills':     'Skills',
+        'nav.experience': 'Experience',
+        'nav.projects':   'Projects',
+        'nav.contact':    'Contact',
+        // Hero
+        'hero.eyebrow': 'Full Stack Developer · Open to Work',
+        'hero.h1':      "Hi, I'm Mehmet Ali Ayran",
+        'hero.bio':     'Software Engineering graduate based in Istanbul. I build scalable web applications and love creating immersive digital experiences.',
+        'hero.cta1':    'View Projects',
+        'hero.cta2':    'Download CV',
+        // Typewriter phrases
+        'tw.0': 'Full Stack Developer',
+        'tw.1': 'Problem Solver',
+        'tw.2': 'Always Learning',
+        'tw.3': 'Open to Work',
+        // About
+        'about.title': 'About Me',
+        'about.p1':    'Software Engineering graduate from Istanbul Nişantaşı University, graduated January 2026. I started my academic journey at Istanbul Gelişim University (Computer Engineering, 2020–2022) before transferring to complete my degree.',
+        'about.p2':    "With 2 international internships spanning project management and software engineering, I bring real-world experience to every project. I'm also the founder of Volvena Studios, an indie game development studio where I build original titles using Unreal Engine 5 and C++.",
+        'stat.internships': 'Internships',
+        'stat.years':       'Years Coding',
+        'stat.games':       'Games Built',
+        'stat.curiosity':   'Curiosity',
+        // Skills
+        'skills.title':  'Skills',
+        'skill.frontend': 'Frontend',
+        'skill.backend':  'Backend',
+        'skill.gamedev':  'Game Dev',
+        'skill.database': 'Database',
+        'skill.tools':    'Tools',
+        'skill.langs':    'Languages',
+        'lang.tr': 'Turkish (Native)',
+        'lang.en': 'English (B2)',
+        'lang.fr': 'French (A1)',
+        // Experience
+        'exp.title':    'Experience',
+        'exp.1.title':   'Project Specialist Intern',
+        'exp.1.company': 'TNC Group / Human Ports · Belgrade, Serbia',
+        'exp.1.date':    'Oct 2025 – Apr 2026',
+        'exp.1.b1':      'Completed training in HR Management, Project Management, Company Law, Brand Design',
+        'exp.1.b2':      'Received 2 official reference letters from HR Specialist and Chairman of the Board',
+        'exp.1.b3':      'Hands-on experience in project planning, resource and risk management',
+        'exp.2.title':   'Software Engineering Intern',
+        'exp.2.company': 'Fil Filtre A.Ş · İskenderun, Hatay',
+        'exp.2.date':    'Sep 2025 – Jan 2026',
+        'exp.2.b1':      'Assisted Software Engineer in day-to-day development tasks',
+        'exp.2.b2':      'Gained exposure to professional software development workflows',
+        'exp.2.b3':      'Supported internal operations and contributed to ongoing projects',
+        'exp.3.title':   'Founder',
+        'exp.3.company': 'Volvena Studios · Istanbul',
+        'exp.3.date':    '2023 – Present',
+        'exp.3.b1':      'Independent game development studio for PC and mobile platforms',
+        'exp.3.b2':      'Building original game IP using Unreal Engine 5 and C++',
+        // Projects
+        'proj.title':   'Projects',
+        'proj.1.name':  'Parkour Game',
+        'proj.1.tag':   'Game Dev',
+        'proj.1.desc':  'Third-person parkour platformer with floating platform level design and custom character movement system. Gameplay demo available.',
+        'proj.2.name':  'Lane Rush',
+        'proj.2.tag':   'Game Dev · Mobile',
+        'proj.2.badge': 'In Development',
+        'proj.2.desc':  'Hyper-casual mobile endless runner in a low-poly city environment. Features enemy system, skill mechanics and health system.',
+        'proj.3.name':  'Portfolio Website',
+        'proj.3.tag':   'Full Stack',
+        'proj.3.badge': 'This site',
+        'proj.3.desc':  'Personal portfolio with AI-powered assistant, bilingual EN/TR support, and serverless backend proxy.',
+        'proj.4.name':  'E-Commerce App',
+        'proj.4.tag':   'Full Stack',
+        'proj.4.badge': 'In Development',
+        'proj.4.desc':  'Full-featured e-commerce platform with product listings, cart management and user authentication.',
+        'proj.github':  'GitHub',
+        'proj.demo':    'Demo',
+        // Hire CTA
+        'hire.title':   'Currently Open to Opportunities',
+        'hire.sub':     'Looking for a Full Stack Developer role · Istanbul or Remote',
+        'hire.cv':      'Download CV',
+        'hire.linkedin':'View LinkedIn',
+        'hire.email':   'Send Email',
+        // Contact
+        'contact.title':   'Get in Touch',
+        'contact.email':   'Email',
+        'contact.github':  'GitHub',
+        'contact.linkedin':'LinkedIn',
+        'contact.phone':   'Phone',
+        // Chat invite card
+        'chat.invite.title': 'Ask my AI assistant',
+        'chat.invite.desc':  'Ask my AI assistant anything about me — my experience, projects, skills, or availability. Powered by Claude.',
+        // Chat drawer
+        'chat.btn':         'Ask Mehmet Ali',
+        'chat.header.name': 'AI Assistant',
+        'chat.placeholder': 'Ask me anything...',
+        'chat.greeting':    "Hi! I'm Mehmet Ali's AI assistant. Ask me anything about his experience, projects, or skills 👋",
+        // Chat drawer subtitle
+        'chat.powered': 'Powered by Claude',
+        // Footer
+        'footer.copy': '© 2025 Mehmet Ali Ayran · Istanbul, Turkey',
+      },
+
+      tr: {
+        // Navigation
+        'nav.about':      'Hakkımda',
+        'nav.skills':     'Yetenekler',
+        'nav.experience': 'Deneyim',
+        'nav.projects':   'Projeler',
+        'nav.contact':    'İletişim',
+        // Hero
+        'hero.eyebrow': 'Full Stack Developer · İş Arıyorum',
+        'hero.h1':      'Merhaba, ben Mehmet Ali Ayran',
+        'hero.bio':     "İstanbul'da yaşayan yazılım mühendisliği mezunuyum. Ölçeklenebilir web uygulamaları geliştiriyor, etkileyici dijital deneyimler yaratmayı seviyorum.",
+        'hero.cta1':    'Projeleri Gör',
+        'hero.cta2':    'CV İndir',
+        // Typewriter phrases
+        'tw.0': 'Full Stack Developer',
+        'tw.1': 'Problem Çözücü',
+        'tw.2': 'Sürekli Öğreniyorum',
+        'tw.3': 'İş Arıyorum',
+        // About
+        'about.title': 'Hakkımda',
+        'about.p1':    "İstanbul Nişantaşı Üniversitesi'nden Yazılım Mühendisliği mezunuyum, Ocak 2026'da mezun oldum. Akademik yolculuğuma İstanbul Gelişim Üniversitesi'nde (Bilgisayar Mühendisliği, 2020–2022) başladım ve daha sonra transfer olarak derecemi tamamladım.",
+        'about.p2':    "Proje yönetimi ve yazılım mühendisliğini kapsayan 2 uluslararası staj deneyimimle her projeye gerçek dünya tecrübesi katıyorum. Aynı zamanda Unreal Engine 5 ve C++ kullanarak özgün oyunlar geliştirdiğim bağımsız bir oyun stüdyosu olan Volvena Studios'un kurucusuyum.",
+        'stat.internships': 'Staj',
+        'stat.years':       'Yıl Kodlama',
+        'stat.games':       'Oyun Yaptım',
+        'stat.curiosity':   'Merak',
+        // Skills
+        'skills.title':   'Yetenekler',
+        'skill.frontend': 'Frontend',
+        'skill.backend':  'Backend',
+        'skill.gamedev':  'Oyun Geliştirme',
+        'skill.database': 'Veritabanı',
+        'skill.tools':    'Araçlar',
+        'skill.langs':    'Diller',
+        'lang.tr': 'Türkçe (Anadil)',
+        'lang.en': 'İngilizce (B2)',
+        'lang.fr': 'Fransızca (A1)',
+        // Experience
+        'exp.title':     'Deneyim',
+        'exp.1.title':   'Proje Uzmanı Stajyeri',
+        'exp.1.company': 'TNC Group / Human Ports · Belgrad, Sırbistan',
+        'exp.1.date':    'Eki 2025 – Nis 2026',
+        'exp.1.b1':      'İK Yönetimi, Proje Yönetimi, Şirket Hukuku ve Marka Tasarımı alanlarında eğitim tamamladı',
+        'exp.1.b2':      'İK Uzmanı ve Yönetim Kurulu Başkanı\'ndan 2 resmi referans mektubu aldı',
+        'exp.1.b3':      'Proje planlama, kaynak ve risk yönetiminde uygulamalı deneyim edindi',
+        'exp.2.title':   'Yazılım Mühendisliği Stajyeri',
+        'exp.2.company': 'Fil Filtre A.Ş · İskenderun, Hatay',
+        'exp.2.date':    'Eyl 2025 – Oca 2026',
+        'exp.2.b1':      'Yazılım Mühendisi\'ne günlük geliştirme görevlerinde destek sağladı',
+        'exp.2.b2':      'Profesyonel yazılım geliştirme iş akışlarına hakim oldu',
+        'exp.2.b3':      'İç operasyonları destekledi ve devam eden projelere katkı sağladı',
+        'exp.3.title':   'Kurucu',
+        'exp.3.company': 'Volvena Studios · İstanbul',
+        'exp.3.date':    '2023 – Günümüz',
+        'exp.3.b1':      'PC ve mobil platformlar için bağımsız oyun geliştirme stüdyosu',
+        'exp.3.b2':      "Unreal Engine 5 ve C++ kullanarak özgün oyun IP'leri geliştiriyor",
+        // Projects
+        'proj.title':   'Projeler',
+        'proj.1.name':  'Parkur Oyunu',
+        'proj.1.tag':   'Oyun Geliştirme',
+        'proj.1.desc':  'Yüzen platform seviye tasarımına ve özel karakter hareket sistemine sahip üçüncü şahıs parkur platformer oyunu. Oynanış demosu mevcut.',
+        'proj.2.name':  'Lane Rush',
+        'proj.2.tag':   'Oyun Geliştirme · Mobil',
+        'proj.2.badge': 'Geliştiriliyor',
+        'proj.2.desc':  'Düşük poligonlu şehir ortamında hyper-casual mobil sonsuz koşu oyunu. Düşman sistemi, beceri mekaniği ve sağlık sistemi içeriyor.',
+        'proj.3.name':  'Portfolyo Sitesi',
+        'proj.3.tag':   'Full Stack',
+        'proj.3.badge': 'Bu site',
+        'proj.3.desc':  'Yapay zeka destekli asistan, iki dilli EN/TR destek ve sunucusuz backend proxy içeren kişisel portfolyo.',
+        'proj.4.name':  'E-Ticaret Uygulaması',
+        'proj.4.tag':   'Full Stack',
+        'proj.4.badge': 'Geliştiriliyor',
+        'proj.4.desc':  'Ürün listeleme, sepet yönetimi ve kullanıcı kimlik doğrulama özelliklerine sahip tam kapsamlı e-ticaret platformu.',
+        'proj.github':  'GitHub',
+        'proj.demo':    'Demo',
+        // Hire CTA
+        'hire.title':    'Şu An İş Fırsatlarına Açığım',
+        'hire.sub':      'Full Stack Developer pozisyonu arıyorum · İstanbul veya Remote',
+        'hire.cv':       'CV İndir',
+        'hire.linkedin': "LinkedIn'i Gör",
+        'hire.email':    'E-posta Gönder',
+        // Contact
+        'contact.title':    'İletişime Geç',
+        'contact.email':    'E-posta',
+        'contact.github':   'GitHub',
+        'contact.linkedin': 'LinkedIn',
+        'contact.phone':    'Telefon',
+        // Chat invite card
+        'chat.invite.title': 'AI Asistanıma Sor',
+        'chat.invite.desc':  'Deneyimlerim, projelerim, yeteneklerim veya müsaitliğim hakkında AI asistanıma her şeyi sorabilirsin. Claude tarafından desteklenmektedir.',
+        // Chat drawer
+        'chat.btn':         "Mehmet Ali'ye Sor",
+        'chat.header.name': 'AI Asistanı',
+        'chat.placeholder': 'Bir şey sor...',
+        'chat.greeting':    "Merhaba! Ben Mehmet Ali'nin AI asistanıyım. Deneyimleri, projeleri veya yetenekleri hakkında her şeyi sorabilirsin 👋",
+        // Chat drawer subtitle
+        'chat.powered': 'Claude tarafından desteklenmektedir',
+        // Footer
+        'footer.copy': '© 2025 Mehmet Ali Ayran · İstanbul, Türkiye',
+      }
+    };
+
+    // ── State ────────────────────────────────────────────────────────────
+    let currentLang    = 'en';
+    let chatOpen       = false;
+    let chatGreeted    = false;
+    let twIndex        = 0;
+    let twCharIndex    = 0;
+    let twDeleting     = false;
+    let twPhrases      = [];
+
+    // ── Language Switch ──────────────────────────────────────────────────
+    function applyTranslations() {
+      const t = i18n[currentLang];
+
+      // Text content
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+
+      // Placeholder attributes
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (t[key] !== undefined) el.placeholder = t[key];
+      });
+
+      // HTML lang attribute
+      document.documentElement.lang = currentLang;
+
+      // Lang toggle label: show the OTHER language
+      document.getElementById('lang-toggle').textContent = currentLang === 'en' ? 'TR' : 'EN';
+
+      // Update typewriter phrases
+      twPhrases = [t['tw.0'], t['tw.1'], t['tw.2'], t['tw.3']];
+    }
+
+    function toggleLang() {
+      currentLang = currentLang === 'en' ? 'tr' : 'en';
+      applyTranslations();
+    }
+
+    // ── Typewriter ───────────────────────────────────────────────────────
+    function runTypewriter() {
+      const el = document.getElementById('typewriter-text');
+      if (!el || !twPhrases.length) return;
+
+      const phrase = twPhrases[twIndex];
+
+      if (twDeleting) {
+        el.textContent = phrase.substring(0, twCharIndex - 1);
+        twCharIndex--;
+      } else {
+        el.textContent = phrase.substring(0, twCharIndex + 1);
+        twCharIndex++;
+      }
+
+      let delay = twDeleting ? 45 : 95;
+
+      if (!twDeleting && twCharIndex === phrase.length) {
+        delay = 2200;
+        twDeleting = true;
+      } else if (twDeleting && twCharIndex === 0) {
+        twDeleting = false;
+        twIndex = (twIndex + 1) % twPhrases.length;
+        delay = 400;
+      }
+
+      setTimeout(runTypewriter, delay);
+    }
+
+    // ── Scroll Animations ────────────────────────────────────────────────
+    function initScrollAnimations() {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    }
+
+    // ── Sticky Nav ───────────────────────────────────────────────────────
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // ── Hamburger ────────────────────────────────────────────────────────
+    function toggleHamburger() {
+      const links    = document.getElementById('nav-links');
+      const hamburger = document.getElementById('hamburger');
+      links.classList.toggle('open');
+      hamburger.classList.toggle('open');
+    }
+
+    // Close mobile menu when a link is clicked
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('nav-links').classList.remove('open');
+        document.getElementById('hamburger').classList.remove('open');
+      });
+    });
+
+    // ── Chat ─────────────────────────────────────────────────────────────
+    function toggleChat() {
+      chatOpen = !chatOpen;
+      document.getElementById('chat-drawer').classList.toggle('open', chatOpen);
+
+      if (chatOpen && !chatGreeted) {
+        chatGreeted = true;
+        appendMessage(i18n[currentLang]['chat.greeting'], 'assistant');
+      }
+
+      if (chatOpen) {
+        setTimeout(() => document.getElementById('chat-input').focus(), 280);
+      }
+    }
+
+    function appendMessage(text, role) {
+      const container = document.getElementById('chat-messages');
+      const msg = document.createElement('div');
+      msg.className = `message ${role}`;
+      msg.textContent = text;
+      container.appendChild(msg);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function showTyping() {
+      const container = document.getElementById('chat-messages');
+      const indicator = document.createElement('div');
+      indicator.className = 'typing-indicator';
+      indicator.id = 'typing-indicator';
+      indicator.innerHTML = '<span></span><span></span><span></span>';
+      container.appendChild(indicator);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function hideTyping() {
+      const el = document.getElementById('typing-indicator');
+      if (el) el.remove();
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const userMessage = input.value.trim();
+      if (!userMessage) return;
+
+      input.value = '';
+      appendMessage(userMessage, 'user');
+      showTyping();
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: userMessage })
+        });
+        const data = await res.json();
+        hideTyping();
+        appendMessage(data.reply || 'Sorry, something went wrong.', 'assistant');
+      } catch {
+        hideTyping();
+        appendMessage(
+          currentLang === 'tr'
+            ? 'Üzgünüm, bir şeyler ters gitti. Lütfen tekrar deneyin.'
+            : 'Sorry, something went wrong. Please try again.',
+          'assistant'
+        );
+      }
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      applyTranslations();
+      initScrollAnimations();
+      runTypewriter();
+    });
+  </script>
+</body>
+</html>
