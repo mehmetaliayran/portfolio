@@ -24,7 +24,7 @@ EDUCATION:
 WORK EXPERIENCE:
 - Project Specialist Intern — TNC Group / Human Ports, Belgrade, Serbia (Oct 2025 – Apr 2026)
 - Software Engineering Intern — Fil Filtre A.Ş, İskenderun, Hatay (Sep 2025 – Jan 2026)
-- Founder — Volvena Studios (indie game dev studio, ongoing hobby)
+- Building Volvena Studios (indie game dev studio, ongoing hobby, since 2026)
 
 TECHNICAL SKILLS:
 Frontend: HTML, CSS, JavaScript, React
