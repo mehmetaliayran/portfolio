@@ -38,6 +38,7 @@ PROJECTS:
 - Lane Rush (UE5, C++, in development) — hyper-casual mobile endless runner
 - Portfolio website with AI assistant (this site)
 - E-Commerce app (React, Node.js, PostgreSQL, in development)
+- GameLog (Node.js, Express, PostgreSQL, JavaScript) — personal game tracking platform; track games playing/completed/want to play, rate and review your library. Live at gamelog-xc03.onrender.com
 
 COURSES:
 - The Complete Full Stack Web Development Bootcamp — Udemy (in progress)
