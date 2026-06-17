@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const https = require('https');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -49,27 +49,44 @@ CAREER GOAL: Seeking Full Stack Developer roles in Istanbul or remote. Open to j
 
 Answer in the same language the visitor uses (Turkish or English). Keep answers short and professional. Never make up information. If unsure, say "You can reach Mehmet Ali directly at m.aliayran@gmail.com".`;
 
+  const requestBody = JSON.stringify({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 1000,
+    system: SYSTEM_PROMPT,
+    messages: [{ role: 'user', content: message }]
+  });
+
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: message }]
-      })
+    const data = await new Promise((resolve, reject) => {
+      const req = https.request(
+        {
+          hostname: 'api.anthropic.com',
+          path: '/v1/messages',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(requestBody),
+            'x-api-key': process.env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01'
+          }
+        },
+        (res) => {
+          let body = '';
+          res.on('data', (chunk) => { body += chunk; });
+          res.on('end', () => {
+            if (res.statusCode >= 200 && res.statusCode < 300) {
+              resolve(JSON.parse(body));
+            } else {
+              reject(new Error(`Anthropic API error: ${res.statusCode} — ${body}`));
+            }
+          });
+        }
+      );
+      req.on('error', reject);
+      req.write(requestBody);
+      req.end();
     });
 
-    if (!response.ok) {
-      throw new Error(`Anthropic API error: ${response.status}`);
-    }
-
-    const data = await response.json();
     const reply = data.content?.[0]?.text || 'Sorry, something went wrong.';
 
     return {
