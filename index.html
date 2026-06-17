@@ -530,6 +530,17 @@ DEPLOYMENT STEPS:
       gap: 5px;
     }
     .project-links a:hover { border-color: var(--accent); color: var(--accent); }
+    .project-links a.link-live {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .project-links a.link-live:hover { background: var(--accent-sec); border-color: var(--accent-sec); color: #fff; }
+    .project-links a.link-github {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .project-links a.link-github:hover { background: var(--accent); color: #fff; }
 
     /* ── Hire CTA ─────────────────────────────────────────────────────── */
     .hire-cta {
@@ -1066,8 +1077,8 @@ DEPLOYMENT STEPS:
               <span>UE5</span><span>C++</span><span>Blueprint</span>
             </div>
             <div class="project-links">
-              <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" data-i18n="proj.github">GitHub</a>
-              <a href="#" data-i18n="proj.demo">Demo</a>
+              <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" class="link-github" data-i18n="proj.github">GitHub</a>
+              <a href="#" class="link-live" data-i18n="proj.demo">Demo</a>
             </div>
           </div>
 
@@ -1082,7 +1093,7 @@ DEPLOYMENT STEPS:
               <span>UE5</span><span>C++</span><span>Blueprint</span>
             </div>
             <div class="project-links">
-              <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" data-i18n="proj.github">GitHub</a>
+              <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" class="link-github" data-i18n="proj.github">GitHub</a>
             </div>
           </div>
 
@@ -1097,7 +1108,7 @@ DEPLOYMENT STEPS:
               <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Claude AI</span><span>Netlify</span>
             </div>
             <div class="project-links">
-              <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" data-i18n="proj.github">GitHub</a>
+              <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" class="link-github" data-i18n="proj.github">GitHub</a>
             </div>
           </div>
 
@@ -1112,7 +1123,7 @@ DEPLOYMENT STEPS:
               <span>React</span><span>Node.js</span><span>PostgreSQL</span>
             </div>
             <div class="project-links">
-              <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" data-i18n="proj.github">GitHub</a>
+              <a href="https://github.com/mehmetaliayran" target="_blank" rel="noopener noreferrer" class="link-github" data-i18n="proj.github">GitHub</a>
             </div>
           </div>
 
@@ -1126,7 +1137,7 @@ DEPLOYMENT STEPS:
               <span>Node.js</span><span>Express</span><span>PostgreSQL</span><span>JavaScript</span>
             </div>
             <div class="project-links">
-              <a href="https://gamelog-xc03.onrender.com" target="_blank" rel="noopener noreferrer" data-i18n="proj.live">Live</a>
+              <a href="https://gamelog-xc03.onrender.com" target="_blank" rel="noopener noreferrer" class="link-live" data-i18n="proj.live">Live</a>
               <a href="https://github.com/mehmetaliayran/gamelog" target="_blank" rel="noopener noreferrer" data-i18n="proj.github">GitHub</a>
             </div>
           </div>
