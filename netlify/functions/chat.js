@@ -56,6 +56,15 @@ Answer in the same language the visitor uses (Turkish or English). Keep answers 
     messages: [{ role: 'user', content: message }]
   });
 
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.error('chat.js: ANTHROPIC_API_KEY is not set');
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reply: 'Configuration error: API key not set. Please add ANTHROPIC_API_KEY to Netlify environment variables.' })
+    };
+  }
+
   try {
     const data = await new Promise((resolve, reject) => {
       const req = https.request(
@@ -77,7 +86,7 @@ Answer in the same language the visitor uses (Turkish or English). Keep answers 
             if (res.statusCode >= 200 && res.statusCode < 300) {
               resolve(JSON.parse(body));
             } else {
-              reject(new Error(`Anthropic API error: ${res.statusCode} — ${body}`));
+              reject(new Error(`Anthropic API ${res.statusCode}: ${body}`));
             }
           });
         }
@@ -95,11 +104,11 @@ Answer in the same language the visitor uses (Turkish or English). Keep answers 
       body: JSON.stringify({ reply })
     };
   } catch (err) {
-    console.error('chat.js error:', err);
+    console.error('chat.js error:', err.message);
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ reply: 'Sorry, the AI assistant is temporarily unavailable. You can reach Mehmet Ali directly at m.aliayran@gmail.com' })
+      body: JSON.stringify({ reply: `Error: ${err.message}` })
     };
   }
 };
